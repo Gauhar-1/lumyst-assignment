@@ -50,7 +50,52 @@ export class ReactFlowService {
 			}))
 		];
 
-		const reactFlowEdges = edges.map((edge) => ({
+		const edgeMap = new Map<string, string>();
+		edges.forEach(edge => {
+			edgeMap.set(`${edge.source}-${edge.target}`, edge.id);
+		});
+
+		const bidirectionalEdgeIds = new Set<string>();
+		edges.forEach(edge => {
+			const reverseEdgeId = edgeMap.get(`${edge.target}-${edge.source}`);
+			if(reverseEdgeId){
+				bidirectionalEdgeIds.add(edge.id);
+				bidirectionalEdgeIds.add(reverseEdgeId);
+			}
+		});
+
+		const processedBidirectional = new Set<string>();
+
+		const reactFlowEdges = edges.map((edge) => {
+
+			const isBidirectional = bidirectionalEdgeIds.has(edge.id);
+
+			if(isBidirectional){
+
+				// Check if already processed this edge's partner
+				const isProcessed = processedBidirectional.has(edge.id);
+
+				const direction = isProcessed ? -1 : 1;
+
+				const reverseEdgeId = edgeMap.get(`${edge.target}-${edge.source}`);
+
+				if(reverseEdgeId){
+					processedBidirectional.add(reverseEdgeId);
+				}
+
+				return {
+					id: edge.id,
+					source: edge.source,
+					target: edge.target,
+					label: edge.label,
+					type: 'bidirectional',
+					data : { direction },
+					style: { stroke: '#800080', strokeWidth: 1 },// purple for bidirectional relationships
+					labelStyle: { fill: '#000', fontWeight: '500' },
+				}
+			}
+
+			return{
 			id: edge.id,
 			source: edge.source,
 			target: edge.target,
@@ -63,7 +108,9 @@ export class ReactFlowService {
 				? { stroke: '#d97706', strokeWidth: 2 } // Dark orange for cross C1-C2 relationships
 				: { stroke: '#374151', strokeWidth: 1 }, // Dark gray for other edges
 			labelStyle: { fill: '#000', fontWeight: '500' },
-		}));
+		}});
+
+		
 
 		return {
 			nodes: reactFlowNodes,

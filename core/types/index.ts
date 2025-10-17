@@ -9,6 +9,7 @@ export interface GraphEdge {
 	source: string;
 	target: string;
 	label: string;
+	isBidirectional?: boolean;
 }
 
 export interface C1Output {

@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import type { ReactFlowNode } from "../core/types";
+import type { ReactFlowNode } from "../core/types/index.ts";
 
 interface BaseNodeProps {
 	data: ReactFlowNode["data"];
@@ -193,7 +193,7 @@ export function GraphNode({ data, selected }: BaseNodeProps) {
 }
 
 // Node type definitions for React Flow
-export const nodeTypes = {
+export const noddeTypes = {
 	c1CategoryNode: C1CategoryNode,
 	c2SubcategoryNode: C2SubcategoryNode,
 	graphNode: GraphNode,

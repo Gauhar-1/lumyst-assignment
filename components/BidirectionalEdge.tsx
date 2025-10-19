@@ -47,8 +47,8 @@ export default function BidirectionalEdge({
                 background: '#ffffff',
                 padding: '2px 8px',
                 borderRadius: 5,
-                fontSize: 12,
-                fontWeight: 700,
+                fontSize: 10,
+                fontWeight: 500,
               }}
               className="nodrag nopan"
             >
